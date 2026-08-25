@@ -15,8 +15,8 @@ static void parse_args(int argc, char* argv[]);
 static void open_sources(void);
 static void close_sources(void);
 
-static FILE* src_file;
-static char* src_file_path;
+FILE* src_file;
+char* src_file_path;
 
 static void parse_args(int argc, char* argv[])
 {
