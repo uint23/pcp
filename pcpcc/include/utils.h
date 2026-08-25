@@ -6,8 +6,8 @@
 #endif /* PCPCC_VERSION */
 
 #define PCPCC_USAGE \
-"\t[-v|--version]: Show pcpcc version" \
-"\n"
+	"\t[-v|--version]: Show pcpcc version" \
+	"\n"
 
 typedef enum {
 	ERR_OK,
@@ -21,4 +21,3 @@ typedef enum {
 void die(ErrorCode ec, const char* fmt, ...);
 
 #endif /* UTILS_H */
-
