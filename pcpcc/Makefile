@@ -6,14 +6,14 @@ CPPFLAGS = -Iinclude
 
 SRC = source/pcpcc.c \
       source/utils.c
-HEADERS = include/utils.h
+HDR = include/utils.h
 
 BUILD_DIR = ../build
 OUT = $(BUILD_DIR)/pcpcc
 
 all: $(OUT)
 
-$(OUT): $(SRC) $(HEADERS) Makefile
+$(OUT): $(SRC) $(HDR) Makefile
 	mkdir -p $(BUILD_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SRC) -o $(OUT)
 

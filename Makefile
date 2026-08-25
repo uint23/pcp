@@ -1,14 +1,13 @@
 .POSIX:
 
-ROOT_BUILD_DIR = $(CURDIR)/build
+all: compiler
 
-all: pcpcc
-
-pcpcc:
-	cd pcpcc && $(MAKE) BUILD_DIR="$(ROOT_BUILD_DIR)" all
+compiler:
+	cd pcpcc && $(MAKE) all
 
 clean:
-	cd pcpcc && $(MAKE) BUILD_DIR="$(ROOT_BUILD_DIR)" clean
-	rm -rf "$(ROOT_BUILD_DIR)"
+	cd pcpcc && $(MAKE) clean
+	rm -rf build/
 
-.PHONY: all clean pcpcc
+.PHONY: all clean compiler
+
