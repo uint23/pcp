@@ -12,6 +12,7 @@ BraceWrapping:
 
 BreakBeforeBinaryOperators: None
 AlignOperands: DontAlign
+AlignEscapedNewlines: DontAlign
 
 InsertNewlineAtEOF: true
 KeepEmptyLines:

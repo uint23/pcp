@@ -5,8 +5,8 @@
 #define PCPCC_VERSION "Unsure.."
 #endif /* PCPCC_VERSION */
 
-#define PCPCC_USAGE                                                            \
-	"\t[-v|--version]: Show pcpcc version"                                 \
+#define PCPCC_USAGE \
+	"\t[-v|--version]: Show pcpcc version" \
 	"\n"
 
 typedef enum {
