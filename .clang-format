@@ -13,3 +13,7 @@ BraceWrapping:
 BreakBeforeBinaryOperators: None
 AlignOperands: DontAlign
 
+InsertNewlineAtEOF: true
+KeepEmptyLines:
+  AtEndOfFile: true
+
