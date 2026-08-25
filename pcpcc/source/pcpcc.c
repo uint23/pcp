@@ -3,12 +3,20 @@
 
 #include "utils.h"
 
+#ifndef PCPCC_VERSION
+#define PCPCC_VERSION "Unsure.."
+#endif /* PCPCC_VERSION */
+
+#define PCPCC_USAGE \
+	"\t[-v|--version]: Show pcpcc version" \
+	"\n"
+
 static void parse_args(int argc, char* argv[]);
 static void open_sources(void);
 static void close_sources(void);
 
-FILE* src_file;
-char* src_file_path;
+static FILE* src_file;
+static char* src_file_path;
 
 static void parse_args(int argc, char* argv[])
 {
