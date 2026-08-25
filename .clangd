@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - -ansi
+    - -pedantic
+    - -Wall
+    - -Wextra
+
