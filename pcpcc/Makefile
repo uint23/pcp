@@ -6,16 +6,19 @@ CPPFLAGS = -Iinclude
 
 SRC = source/pcpcc.c \
       source/utils.c
-OUT = build/pcpcc
+HDR = include/utils.h
+
+BUILD_DIR = ../build
+OUT = $(BUILD_DIR)/pcpcc
 
 all: $(OUT)
 
-$(OUT): $(SRC)
-	mkdir -p build
+$(OUT): $(SRC) $(HDR) Makefile
+	mkdir -p $(BUILD_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SRC) -o $(OUT)
 
 clean:
-	rm -rf build
+	rm -f $(OUT)
 
 .PHONY: all clean
 
