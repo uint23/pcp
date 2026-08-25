@@ -12,6 +12,8 @@
 typedef enum {
 	ERR_OK,
 
+	ERR_SRC_FOPEN,
+
 	ErrorLast
 } ErrorCode;
 
