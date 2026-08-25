@@ -1,0 +1,15 @@
+IndentWidth: 8
+TabWidth: 8
+UseTab: Always
+
+PointerAlignment: Left
+SpaceBeforeParens: ControlStatements
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true
+  AfterControlStatement: false
+
+BreakBeforeBinaryOperators: None
+AlignOperands: DontAlign
+
