@@ -12,4 +12,9 @@ BraceWrapping:
 
 BreakBeforeBinaryOperators: None
 AlignOperands: DontAlign
+AlignEscapedNewlines: DontAlign
+
+MaxEmptyLinesToKeep: 1
+KeepEmptyLines:
+  AtEndOfFile: true
 
