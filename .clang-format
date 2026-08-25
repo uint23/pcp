@@ -9,11 +9,13 @@ BreakBeforeBraces: Custom
 BraceWrapping:
   AfterFunction: true
   AfterControlStatement: false
+AllowShortFunctionsOnASingleLine: None
 
 BreakBeforeBinaryOperators: None
 AlignOperands: DontAlign
 AlignEscapedNewlines: DontAlign
 
+InsertNewlineAtEOF: true
 MaxEmptyLinesToKeep: 1
 KeepEmptyLines:
   AtEndOfFile: true
