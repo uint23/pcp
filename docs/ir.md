@@ -2,7 +2,7 @@ Initial concepts for pcp IR
 
 ```
 ;; Return the greater value of the provided parameters
-fn i32 max(a: i32, b: i32):
+fn i32 max(a: i32, b: i32) {
 start():
 	gt: i1 = sgt a, b
 	br gt, amax(), bmax()
@@ -15,6 +15,7 @@ bmax():
 
 end(res: i32):
 	ret res
+}
 ```
 
 | Type   | Meaning                      |
