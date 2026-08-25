@@ -12,7 +12,12 @@
 typedef enum {
 	ERR_OK,
 
-	ERR_SRC_FOPEN,
+	ERR_ALLOC,
+	ERR_FOPEN,
+	ERR_FTELL,
+	ERR_FSEEK,
+
+	ERR_SRC_DATA_LEN_DIFFERENT,
 
 	ErrorLast
 } ErrorCode;
