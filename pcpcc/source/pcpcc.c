@@ -2,14 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "common.h"
+#include "lexer.h"
 #include "utils.h"
-
-typedef struct {
-	const char* path;
-	FILE*       file;
-	char*       data;
-	size_t      len;
-} SourceFile;
 
 static void parse_args(int argc, char* argv[]);
 static void open_source(SourceFile* source, const char* path);
@@ -80,6 +75,7 @@ int main(int argc, char* argv[])
 	open_source(&source, argv[1]);
 	read_source(&source);
 	printf("%s", source.data);
+	lexer_init(&source);
 	close_source(&source);
 
 	return ERR_OK;
