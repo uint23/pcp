@@ -3,7 +3,6 @@
 
 #include "common.h"
 
-/* TODO most of these are still unused */
 typedef enum {
 	TOK_INVALID,
 	TOK_EOF,
@@ -116,6 +115,12 @@ typedef struct {
 
 /* initialise internal lexer */
 void lexer_init(SourceFile* source);
+
+/* get the next token */
+Token lexer_next(void);
+
+/* return the name for token type */
+const char* lexer_nametok(TokenType type);
 
 #endif /* LEXER_H */
 
