@@ -5,6 +5,7 @@ CFLAGS = -ansi -pedantic -Wall -Wextra
 CPPFLAGS = -Iinclude
 
 SRC = source/pcpcc.c \
+      source/lexer.c \
       source/utils.c
 HDR = include/utils.h
 
