@@ -302,6 +302,10 @@ Token lexer_next(void)
 
 	/* multi character tokens */
 	case '.':
+		/* .N format float */
+		if (isdigit((unsigned char)peek()))
+			return number();
+
 		if (match('.') && match('.'))
 			return mktok(TOK_DOTDOTDOT);
 		return mktok(TOK_DOT);

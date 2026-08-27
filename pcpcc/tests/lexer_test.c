@@ -15,6 +15,7 @@ int main(void)
 	float f1 = 10.1;
 	float f2 = 10.1f;
 	float f3 = 10.1e3;
+	float f4 = .10;
 
 	char c0 = 'a';
 	char c1 = '\\';
