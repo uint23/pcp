@@ -24,7 +24,7 @@ static void open_source(SourceFile* source, const char* path)
 {
 	long len;
 	source->path = path;
-	source->file = fopen(source->path, "r");
+	source->file = fopen(source->path, "rb");
 	if (!source->file)
 		die(ERR_FOPEN, "Failed to open file: %s", source->path);
 
