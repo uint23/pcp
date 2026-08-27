@@ -52,7 +52,7 @@ static char peek(void)
 /* advance until next non-whitespace */
 static void skipws(void)
 {
-	while (isspace(peek()))
+	while (isspace((unsigned char)peek()))
 		advance();
 }
 
