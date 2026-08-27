@@ -104,7 +104,7 @@ typedef enum {
 	TOK_HASH,
 	TOK_HASHHASH,
 
-	TOK_LAST
+	TOK_UNKNOWN
 } TokenType;
 
 typedef struct {
