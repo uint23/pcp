@@ -4,6 +4,7 @@
 #include "lexer.h"
 
 static char advance(void);
+static void comment(void);
 static int eof(void);
 static Token identifier(void);
 static Token integar(void);
@@ -64,6 +65,23 @@ static char advance(void)
 		lexer.pos++;
 
 	return c;
+}
+
+/* get end half of a comment; the first half is
+   handled in lexer_next */
+static void comment(void)
+{
+	advance(); /* consoom '*' */
+
+	while (!eof()) {
+		if (peek() == '*' && lexer.source->data[lexer.pos + 1] == '/') {
+			advance();
+			advance();
+			return;
+		}
+
+		advance();
+	}
 }
 
 static int eof(void)
@@ -248,6 +266,11 @@ Token lexer_next(void)
 	case '/':
 		if (match('='))
 			return mktok(TOK_ASSIGN_DIV);
+		if (peek() == '*') {
+			comment();
+			/* skip */
+			return lexer_next();
+		}
 		return mktok(TOK_SLASH);
 
 	case '%':
