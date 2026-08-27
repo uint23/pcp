@@ -306,8 +306,13 @@ Token lexer_next(void)
 		if (isdigit((unsigned char)peek()))
 			return number();
 
-		if (match('.') && match('.'))
+		if (peek() == '.' && lexer.pos + 1 < lexer.source->len &&
+		    lexer.source->data[lexer.pos + 1] == '.') {
+			advance();
+			advance();
 			return mktok(TOK_DOTDOTDOT);
+		}
+
 		return mktok(TOK_DOT);
 
 	case '&':
