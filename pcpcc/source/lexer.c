@@ -4,6 +4,7 @@
 #include "lexer.h"
 
 static char advance(void);
+static Token character(void);
 static void comment(void);
 static int eof(void);
 static Token identifier(void);
@@ -65,6 +66,24 @@ static char advance(void)
 		lexer.pos++;
 
 	return c;
+}
+
+/* lex character literals */
+static Token character(void)
+{
+	while (!eof() && peek() != '\'') {
+		if (peek() == '\\')
+			advance();
+
+		if (!eof())
+			advance();
+	}
+
+	if (eof())
+		return mktok(TOK_INVALID);
+
+	advance();
+	return mktok(TOK_CHAR_LITERAL);
 }
 
 /* get end half of a comment; the first half is
@@ -223,6 +242,8 @@ Token lexer_next(void)
 	case ';': return mktok(TOK_SEMICOLON);
 
 	case ',': return mktok(TOK_COMMA);
+
+	case '\'': return character();
 
 	/* multi character tokens */
 	case '.':
