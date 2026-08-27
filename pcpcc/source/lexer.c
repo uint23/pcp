@@ -1,9 +1,11 @@
 #include <ctype.h>
+#include <string.h>
 
 #include "lexer.h"
 
 static char advance(void);
 static int eof(void);
+static Token identifier(void);
 static Token mktok(TokenType type);
 static char peek(void);
 static void skipws(void);
@@ -13,6 +15,44 @@ static struct {
 	size_t      start;
 	size_t      pos;
 } lexer;
+
+static const struct {
+	const char* name;
+	TokenType   type;
+} keywords[] = {
+	{ "auto", TOK_AUTO },
+	{ "break", TOK_BREAK },
+	{ "case", TOK_CASE },
+	{ "char", TOK_CHAR },
+	{ "const", TOK_CONST },
+	{ "continue", TOK_CONTINUE },
+	{ "default", TOK_DEFAULT },
+	{ "do", TOK_DO },
+	{ "double", TOK_DOUBLE },
+	{ "else", TOK_ELSE },
+	{ "enum", TOK_ENUM },
+	{ "extern", TOK_EXTERN },
+	{ "float", TOK_FLOAT },
+	{ "for", TOK_FOR },
+	{ "goto", TOK_GOTO },
+	{ "if", TOK_IF },
+	{ "int", TOK_INT },
+	{ "long", TOK_LONG },
+	{ "register", TOK_REGISTER },
+	{ "return", TOK_RETURN },
+	{ "short", TOK_SHORT },
+	{ "signed", TOK_SIGNED },
+	{ "sizeof", TOK_SIZEOF },
+	{ "static", TOK_STATIC },
+	{ "struct", TOK_STRUCT },
+	{ "switch", TOK_SWITCH },
+	{ "typedef", TOK_TYPEDEF },
+	{ "union", TOK_UNION },
+	{ "unsigned", TOK_UNSIGNED },
+	{ "void", TOK_VOID },
+	{ "volatile", TOK_VOLATILE },
+	{ "while", TOK_WHILE }
+};
 
 static char advance(void)
 {
@@ -27,6 +67,28 @@ static char advance(void)
 static int eof(void)
 {
 	return lexer.pos >= lexer.source->len;
+}
+
+/* lex an identifier */
+static Token identifier(void)
+{
+	size_t toklen = lexer.pos - lexer.start;
+	size_t wordlen;
+	int wordeq;
+	size_t i;
+
+	while (isalnum((unsigned char)peek()) || peek() == '_')
+		advance();
+
+	/* find keyword type */
+	for (i = 0; i < LENGTH(keywords); i++) {
+		wordlen = strlen(keywords[i].name);
+		wordeq = strncmp(lexer.source->data + lexer.start, keywords[i].name, toklen) == 0;
+		if (wordlen == toklen && wordeq)
+			return mktok(keywords[i].type);
+	}
+
+	return mktok(TOK_IDENTIFIER);
 }
 
 /* convery token type to real token */
@@ -73,6 +135,8 @@ Token lexer_next(void)
 		return mktok(TOK_EOF);
 
 	c = advance();
+	if (isalpha((unsigned char)c) || c == '_')
+		return identifier();
 
 	switch (c) {
 	case '[': return mktok(TOK_BRACKL);
