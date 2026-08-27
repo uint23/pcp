@@ -1,5 +1,6 @@
 int main()
 {
-	return 67;
+	int x67 = 67;
+	return x67;
 }
 
