@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#define LENGTH(arr) (sizeof(arr) / sizeof(arr[0]))
+
 typedef struct {
 	const char* path;
 	FILE*       file;
