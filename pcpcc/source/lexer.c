@@ -13,6 +13,7 @@ static int match(char c);
 static Token mktok(TokenType type);
 static char peek(void);
 static void skipws(void);
+static Token string(void);
 
 static struct {
 	SourceFile* source;
@@ -202,6 +203,24 @@ static void skipws(void)
 		advance();
 }
 
+static Token string(void)
+{
+	while (!eof() && peek() != '"') {
+		/* ignore escaped " */
+		if (peek() == '\\')
+			advance();
+
+		if (!eof())
+			advance();
+	}
+
+	if (eof())
+		return mktok(TOK_INVALID);
+
+	advance();
+	return mktok(TOK_STRING_LITERAL);
+}
+
 void lexer_init(SourceFile* source)
 {
 	lexer.source = source;
@@ -244,6 +263,7 @@ Token lexer_next(void)
 	case ',': return mktok(TOK_COMMA);
 
 	case '\'': return character();
+	case '"':  return string();
 
 	/* multi character tokens */
 	case '.':
