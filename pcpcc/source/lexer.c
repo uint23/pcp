@@ -93,11 +93,36 @@ static Token identifier(void)
 }
 
 /* lex an integar literal
-   TODO octals, hex and suffixes */
-static Token integar(void)
+   TODO error handling */
+static Token integer(void)
 {
-	while (isdigit((unsigned char)peek()))
+	/* literal formats */
+	if (lexer.source->data[lexer.start] == '0') {
+		if (peek() == 'x' || peek() == 'X')
+			for (advance(); isxdigit((unsigned char)peek()); advance())
+				;
+		else
+			while (peek() >= '0' && peek() <= '7')
+				advance();
+	}
+	else {
+		while (isdigit((unsigned char)peek()))
+			advance();
+	}
+
+	/* suffixes */
+	if (peek() == 'u' || peek() == 'U') {
 		advance();
+
+		if (peek() == 'l' || peek() == 'L')
+			advance();
+	}
+	else if (peek() == 'l' || peek() == 'L') {
+		advance();
+
+		if (peek() == 'u' || peek() == 'U')
+			advance();
+	}
 
 	return mktok(TOK_INT_LITERAL);
 }
