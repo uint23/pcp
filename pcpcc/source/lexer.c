@@ -8,9 +8,9 @@ static Token character(void);
 static void comment(void);
 static int eof(void);
 static Token identifier(void);
-static Token integar(void);
 static int match(char c);
 static Token mktok(TokenType type);
+static Token number(void);
 static char peek(void);
 static void skipws(void);
 static Token string(void);
@@ -132,41 +132,6 @@ static Token identifier(void)
 	return mktok(TOK_IDENTIFIER);
 }
 
-/* lex an integar literal
-   TODO error handling */
-static Token integar(void)
-{
-	/* literal formats */
-	if (lexer.source->data[lexer.start] == '0') {
-		if (peek() == 'x' || peek() == 'X')
-			for (advance(); isxdigit((unsigned char)peek()); advance())
-				;
-		else
-			while (peek() >= '0' && peek() <= '7')
-				advance();
-	}
-	else {
-		while (isdigit((unsigned char)peek()))
-			advance();
-	}
-
-	/* suffixes */
-	if (peek() == 'u' || peek() == 'U') {
-		advance();
-
-		if (peek() == 'l' || peek() == 'L')
-			advance();
-	}
-	else if (peek() == 'l' || peek() == 'L') {
-		advance();
-
-		if (peek() == 'u' || peek() == 'U')
-			advance();
-	}
-
-	return mktok(TOK_INT_LITERAL);
-}
-
 /* check if current char is c */
 static int match(char c)
 {
@@ -187,6 +152,75 @@ static Token mktok(TokenType type)
 	t.len = lexer.pos - lexer.start;
 
 	return t;
+}
+
+/* lex a number (ints or floats)
+   TODO bad value handling */
+static Token number(void)
+{
+	int isfloat = 0;
+
+	/* hexadecimal */
+	if (lexer.source->data[lexer.start] == '0' &&
+	   (peek() == 'x' || peek() == 'X')) {
+		advance();
+
+		while (isxdigit((unsigned char)peek()))
+			advance();
+	}
+	else {
+		/* started with '.' */
+		if (lexer.source->data[lexer.start] == '.')
+			isfloat = 1;
+
+		while (isdigit((unsigned char)peek()))
+			advance();
+
+		if (peek() == '.') {
+			isfloat = 1;
+			advance();
+
+			while (isdigit((unsigned char)peek()))
+				advance();
+		}
+
+		/* scientific */
+		if (peek() == 'e' || peek() == 'E') {
+			isfloat = 1;
+			advance();
+
+			if (peek() == '+' || peek() == '-')
+				advance();
+
+			while (isdigit((unsigned char)peek()))
+				advance();
+		}
+	}
+
+	/* floating point suffixes */
+	if (isfloat) {
+		if (peek() == 'f' || peek() == 'F' ||
+		    peek() == 'l' || peek() == 'L')
+			advance();
+
+		return mktok(TOK_FLOAT_LITERAL);
+	}
+
+	/* integar suffixes */
+	if (peek() == 'u' || peek() == 'U') {
+		advance();
+
+		if (peek() == 'l' || peek() == 'L')
+			advance();
+	}
+	else if (peek() == 'l' || peek() == 'L') {
+		advance();
+
+		if (peek() == 'u' || peek() == 'U')
+			advance();
+	}
+
+	return mktok(TOK_INT_LITERAL);
 }
 
 static char peek(void)
@@ -243,7 +277,7 @@ Token lexer_next(void)
 		return identifier();
 
 	if (isdigit((unsigned char)c))
-		return integar();
+		return number();
 
 	switch (c) {
 

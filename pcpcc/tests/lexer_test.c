@@ -1,27 +1,32 @@
 int variadic(int x, ...)
 {
-	return 1;
+	return x;
 }
 
 int main(void)
 {
 	/* hallo welt! */
-	int x67 = 67;
-	int hex = 0x67;
-	int oct = 067;
-	int suf = 67L;
+	int i0 = 67;
+	int i1 = 0x67;
+	int i2 = 067;
+	int i3 = 67L;
 
-	char char0 = 'a';
-	char char1 = '\\';
-	char char2 = '\'';
-	char char3 = '\n';
+	float f0 = 10;
+	float f1 = 10.1;
+	float f2 = 10.1f;
+	float f3 = 10.1e3;
 
-	char* string0 = "diggy dogsticks\n";
-	char* string1 = "zoooooom";
-	char* string2 = "moo\"oo\"zz";
+	char c0 = 'a';
+	char c1 = '\\';
+	char c2 = '\'';
+	char c3 = '\n';
 
-	variadic(hex, oct, suf);
+	char* s0 = "diggy dogsticks\n";
+	char* s1 = "zoooooom";
+	char* s2 = "moo\"oo\"zz";
 
-	return x67;
+	variadic(i0, i1, i3);
+
+	return 0;
 }
 
