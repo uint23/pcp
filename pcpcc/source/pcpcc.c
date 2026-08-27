@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+#include "common.h"
+#include "lexer.h"
 #include "utils.h"
 
 #ifndef PCPCC_VERSION
@@ -12,11 +15,9 @@
 	"\n"
 
 static void parse_args(int argc, char* argv[]);
-static void open_sources(void);
-static void close_sources(void);
-
-FILE* src_file;
-char* src_file_path;
+static void open_source(SourceFile* source, const char* path);
+static void read_source(SourceFile* source);
+static void close_source(SourceFile* source);
 
 static void parse_args(int argc, char* argv[])
 {
@@ -25,33 +26,76 @@ static void parse_args(int argc, char* argv[])
 
 	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)
 		die(ERR_OK, "%s ver. %s", argv[0], PCPCC_VERSION);
-
-	src_file_path = argv[1];
 }
 
-static void open_sources(void)
+static void open_source(SourceFile* source, const char* path)
 {
-	int c;
+	long len;
+	source->path = path;
+	source->file = fopen(source->path, "rb");
+	if (!source->file)
+		die(ERR_FOPEN, "Failed to open file: %s", source->path);
 
-	src_file = fopen(src_file_path, "r");
-	if (!src_file)
-		die(ERR_SRC_FOPEN, "Failed to open file %s", src_file_path);
+	/* get file length */
+	if (fseek(source->file, 0, SEEK_END) != 0)
+		die(ERR_FSEEK, "Failed to seek to end of file: %s", source->path);
 
-	while ((c = fgetc(src_file)) != EOF)
-		putchar(c);
+	len = ftell(source->file);
+	if (len < 0)
+		die(ERR_FTELL, "Failed to get file size: %s", source->path);
+	source->len = (size_t) len;
+
+	if (fseek(source->file, 0, SEEK_SET) != 0)
+		die(ERR_FSEEK, "Failed to seek to start of file: %s", source->path);
 }
 
-static void close_sources(void)
+static void read_source(SourceFile* source)
 {
-	if (src_file)
-		fclose(src_file);
+	size_t nread;
+
+	/* copy file contents */
+	source->data = malloc(source->len + 1);
+	if (!source->data)
+		die(ERR_ALLOC, "Failed to allocate data buffer: %s", source->path);
+
+	/* check source->data size is same as file len */
+	nread = fread(source->data, 1, source->len, source->file);
+	if (nread != source->len)
+		die(ERR_SRC_DATA_LEN_DIFFERENT, "Failed to read whole file: %s", source->path);
+
+	source->data[source->len] = '\0';
+}
+
+static void close_source(SourceFile* source)
+{
+	if (source->file)
+		fclose(source->file);
+
+	if (source->data)
+		free(source->data);
 }
 
 int main(int argc, char* argv[])
 {
+	SourceFile source = { 0 };
+	Token token;
+
 	parse_args(argc, argv);
-	open_sources();
-	close_sources();
+	open_source(&source, argv[1]);
+	read_source(&source);
+	printf("%s", source.data);
+
+	lexer_init(&source);
+	printf("TOKEN\tNAME\t\tVALUE\n");
+	do { /* file can be just EOF */
+		token = lexer_next();
+		printf("[%d]\t%s\t", token.type, lexer_nametok(token.type));
+		fwrite(token.start, 1, token.len, stdout);
+		putchar('\n');
+	} while (token.type != TOK_EOF);
+
+	close_source(&source);
+
 	return ERR_OK;
 }
 

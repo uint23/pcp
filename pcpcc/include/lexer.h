@@ -1,0 +1,126 @@
+#ifndef LEXER_H
+#define LEXER_H
+
+#include "common.h"
+
+typedef enum {
+	TOK_INVALID,
+	TOK_EOF,
+
+	TOK_IDENTIFIER,
+	TOK_INT_LITERAL,
+	TOK_FLOAT_LITERAL,
+	TOK_CHAR_LITERAL,
+	TOK_STRING_LITERAL,
+
+	TOK_AUTO,
+	TOK_BREAK,
+	TOK_CASE,
+	TOK_CHAR,
+	TOK_CONST,
+	TOK_CONTINUE,
+	TOK_DEFAULT,
+	TOK_DO,
+	TOK_DOUBLE,
+	TOK_ELSE,
+	TOK_ENUM,
+	TOK_EXTERN,
+	TOK_FLOAT,
+	TOK_FOR,
+	TOK_GOTO,
+	TOK_IF,
+	TOK_INT,
+	TOK_LONG,
+	TOK_REGISTER,
+	TOK_RETURN,
+	TOK_SHORT,
+	TOK_SIGNED,
+	TOK_SIZEOF,
+	TOK_STATIC,
+	TOK_STRUCT,
+	TOK_SWITCH,
+	TOK_TYPEDEF,
+	TOK_UNION,
+	TOK_UNSIGNED,
+	TOK_VOID,
+	TOK_VOLATILE,
+	TOK_WHILE,
+
+	TOK_BRACKL,
+	TOK_BRACKR,
+	TOK_PARENL,
+	TOK_PARENR,
+	TOK_BRACEL,
+	TOK_BRACER,
+
+	TOK_DOT,
+	TOK_DOTDOTDOT,
+	TOK_ARROW,
+
+	TOK_INCREMENT,
+	TOK_DECREMENT,
+
+	TOK_STAR,
+	TOK_PLUS,
+	TOK_MINUS,
+	TOK_TILDA,
+	TOK_BANG,
+	TOK_SLASH,
+	TOK_PERCENT,
+
+	TOK_SHL,
+	TOK_SHR,
+
+	TOK_LT,
+	TOK_GT,
+	TOK_LE,
+	TOK_GE,
+	TOK_EQ,
+	TOK_NE,
+
+	TOK_XOR_BIT,
+	TOK_OR_BIT,
+	TOK_AND_BIT,
+	TOK_OR_LOGICAL,
+	TOK_AND_LOGICAL,
+
+	TOK_QUESTION,
+	TOK_COLON,
+	TOK_SEMICOLON,
+
+	TOK_ASSIGN,
+	TOK_ASSIGN_MUL,
+	TOK_ASSIGN_DIV,
+	TOK_ASSIGN_MOD,
+	TOK_ASSIGN_ADD,
+	TOK_ASSIGN_SUB,
+	TOK_ASSIGN_SHL,
+	TOK_ASSIGN_SHR,
+	TOK_ASSIGN_XOR,
+	TOK_ASSIGN_AND,
+	TOK_ASSIGN_OR,
+
+	TOK_COMMA,
+	TOK_HASH,
+	TOK_HASHHASH,
+
+	TOK_UNKNOWN
+} TokenType;
+
+typedef struct {
+	TokenType   type;
+	const char* start;
+	size_t      len;
+} Token;
+
+/* initialise internal lexer */
+void lexer_init(SourceFile* source);
+
+/* get the next token */
+Token lexer_next(void);
+
+/* return the name for token type */
+const char* lexer_nametok(TokenType type);
+
+#endif /* LEXER_H */
+

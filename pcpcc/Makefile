@@ -5,8 +5,11 @@ CFLAGS = -ansi -pedantic -Wall -Wextra
 CPPFLAGS = -Iinclude
 
 SRC = source/pcpcc.c \
+      source/lexer.c \
       source/utils.c
-HDR = include/utils.h
+HDR = include/common.h \
+      include/lexer.h \
+      include/utils.h
 
 BUILD_DIR = ../build
 OUT = $(BUILD_DIR)/pcpcc
