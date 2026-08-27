@@ -16,6 +16,10 @@ int main(void)
 	char char2 = '\'';
 	char char3 = '\n';
 
+	char* string0 = "diggy dogsticks\n";
+	char* string1 = "zoooooom";
+	char* string2 = "moo\"oo\"zz";
+
 	variadic(hex, oct, suf);
 
 	return x67;
