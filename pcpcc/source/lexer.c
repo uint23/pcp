@@ -112,7 +112,7 @@ static int eof(void)
 /* lex an identifier */
 static Token identifier(void)
 {
-	size_t toklen = lexer.pos - lexer.start;
+	size_t toklen;
 	size_t wordlen;
 	int wordeq;
 	size_t i;
@@ -121,6 +121,7 @@ static Token identifier(void)
 		advance();
 
 	/* find keyword type */
+	toklen = lexer.pos - lexer.start;
 	for (i = 0; i < LENGTH(keywords); i++) {
 		wordlen = strlen(keywords[i].name);
 		wordeq = strncmp(lexer.source->data + lexer.start, keywords[i].name, toklen) == 0;
