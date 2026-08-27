@@ -6,6 +6,7 @@
 static char advance(void);
 static int eof(void);
 static Token identifier(void);
+static Token integar(void);
 static Token mktok(TokenType type);
 static char peek(void);
 static void skipws(void);
@@ -91,6 +92,16 @@ static Token identifier(void)
 	return mktok(TOK_IDENTIFIER);
 }
 
+/* lex an integar literal
+   TODO octals, hex and suffixes */
+static Token integar(void)
+{
+	while (isdigit((unsigned char)peek()))
+		advance();
+
+	return mktok(TOK_INT_LITERAL);
+}
+
 /* convery token type to real token */
 static Token mktok(TokenType type)
 {
@@ -137,6 +148,9 @@ Token lexer_next(void)
 	c = advance();
 	if (isalpha((unsigned char)c) || c == '_')
 		return identifier();
+
+	if (isdigit((unsigned char)c))
+		return integar();
 
 	switch (c) {
 	case '[': return mktok(TOK_BRACKL);
