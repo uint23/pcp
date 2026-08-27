@@ -7,6 +7,7 @@ static char advance(void);
 static int eof(void);
 static Token identifier(void);
 static Token integar(void);
+static int match(char c);
 static Token mktok(TokenType type);
 static char peek(void);
 static void skipws(void);
@@ -94,7 +95,7 @@ static Token identifier(void)
 
 /* lex an integar literal
    TODO error handling */
-static Token integer(void)
+static Token integar(void)
 {
 	/* literal formats */
 	if (lexer.source->data[lexer.start] == '0') {
@@ -125,6 +126,16 @@ static Token integer(void)
 	}
 
 	return mktok(TOK_INT_LITERAL);
+}
+
+/* check if current char is c */
+static int match(char c)
+{
+	if (peek() != c)
+		return 0;
+
+	advance();
+	return 1;
 }
 
 /* convery token type to real token */
@@ -178,6 +189,8 @@ Token lexer_next(void)
 		return integar();
 
 	switch (c) {
+
+	/* single character tokens */
 	case '[': return mktok(TOK_BRACKL);
 	case ']': return mktok(TOK_BRACKR);
 	case '(': return mktok(TOK_PARENL);
@@ -185,33 +198,107 @@ Token lexer_next(void)
 	case '{': return mktok(TOK_BRACEL);
 	case '}': return mktok(TOK_BRACER);
 
-	case '.': return mktok(TOK_DOT);
-
-	case '&': return mktok(TOK_AMPERSAND);
-	case '*': return mktok(TOK_STAR);
-	case '+': return mktok(TOK_PLUS);
-	case '-': return mktok(TOK_MINUS);
 	case '~': return mktok(TOK_TILDA);
-	case '!': return mktok(TOK_BANG);
-	case '/': return mktok(TOK_SLASH);
-	case '%': return mktok(TOK_PERCENT);
-
-	case '<': return mktok(TOK_LT);
-	case '>': return mktok(TOK_GT);
-
-	case '^': return mktok(TOK_CARET);
-	case '|': return mktok(TOK_PIPE);
 
 	case '?': return mktok(TOK_QUESTION);
 	case ':': return mktok(TOK_COLON);
 	case ';': return mktok(TOK_SEMICOLON);
 
-	case '=': return mktok(TOK_ASSIGN);
-
 	case ',': return mktok(TOK_COMMA);
-	case '#': return mktok(TOK_HASH);
 
-	default:  return mktok(TOK_INVALID);
+	/* multi character tokens */
+	case '.':
+		if (match('.') && match('.'))
+			return mktok(TOK_DOTDOTDOT);
+		return mktok(TOK_DOT);
+
+	case '&':
+		if (match('&'))
+			return mktok(TOK_AND_LOGICAL);
+		if (match('='))
+			return mktok(TOK_ASSIGN_AND);
+		return mktok(TOK_AND_BIT);
+
+	case '*':
+		if (match('='))
+			return mktok(TOK_ASSIGN_MUL);
+		return mktok(TOK_STAR);
+
+	case '+':
+		if (match('+'))
+			return mktok(TOK_INCREMENT);
+		if (match('='))
+			return mktok(TOK_ASSIGN_ADD);
+		return mktok(TOK_PLUS);
+
+	case '-':
+		if (match('-'))
+			return mktok(TOK_DECREMENT);
+		if (match('>'))
+			return mktok(TOK_ARROW);
+		if (match('='))
+			return mktok(TOK_ASSIGN_SUB);
+		return mktok(TOK_MINUS);
+
+	case '!':
+		if (match('='))
+			return mktok(TOK_NE);
+		return mktok(TOK_BANG);
+
+	case '/':
+		if (match('='))
+			return mktok(TOK_ASSIGN_DIV);
+		return mktok(TOK_SLASH);
+
+	case '%':
+		if (match('='))
+			return mktok(TOK_ASSIGN_MOD);
+		return mktok(TOK_PERCENT);
+
+	case '<':
+		if (match('<')) {
+			if (match('='))
+				return mktok(TOK_ASSIGN_SHL);
+			return mktok(TOK_SHL);
+		}
+		if (match('='))
+			return mktok(TOK_LE);
+		return mktok(TOK_LT);
+
+	case '>':
+		if (match('>')) {
+			if (match('='))
+				return mktok(TOK_ASSIGN_SHR);
+			return mktok(TOK_SHR);
+		}
+		if (match('='))
+			return mktok(TOK_GE);
+		return mktok(TOK_GT);
+
+	case '^':
+		if (match('='))
+			return mktok(TOK_ASSIGN_XOR);
+		return mktok(TOK_XOR_BIT);
+
+	case '|':
+		if (match('|'))
+			return mktok(TOK_OR_LOGICAL);
+		if (match('='))
+			return mktok(TOK_ASSIGN_OR);
+		return mktok(TOK_OR_BIT);
+
+	case '=':
+		if (match('='))
+			return mktok(TOK_EQ);
+		return mktok(TOK_ASSIGN);
+
+	case '#':
+		if (match('#'))
+			return mktok(TOK_HASHHASH);
+		return mktok(TOK_HASH);
+
+	default:
+		return mktok(TOK_INVALID);
 	}
 }
 
@@ -268,7 +355,6 @@ const char* lexer_nametok(TokenType type)
 	case TOK_ARROW: return "TOK_ARROW";
 	case TOK_INCREMENT: return "TOK_INCREMENT";
 	case TOK_DECREMENT: return "TOK_DECREMENT";
-	case TOK_AMPERSAND: return "TOK_AMPERSAND";
 	case TOK_STAR: return "TOK_STAR";
 	case TOK_PLUS: return "TOK_PLUS";
 	case TOK_MINUS: return "TOK_MINUS";
@@ -284,10 +370,12 @@ const char* lexer_nametok(TokenType type)
 	case TOK_GE: return "TOK_GE";
 	case TOK_EQ: return "TOK_EQ";
 	case TOK_NE: return "TOK_NE";
-	case TOK_CARET: return "TOK_CARET";
-	case TOK_PIPE: return "TOK_PIPE";
-	case TOK_AND: return "TOK_AND";
-	case TOK_OR: return "TOK_OR";
+	case TOK_XOR_BIT: return "TOK_XOR_BIT";
+	case TOK_OR_BIT: return "TOK_OR_BIT";
+	case TOK_AND_BIT: return "TOK_AND_BIT";
+	case TOK_AND_LOGICAL: return "TOK_AND_LOGICAL";
+	case TOK_OR_LOGICAL: return "TOK_OR_LOGICAL";
+
 	case TOK_QUESTION: return "TOK_QUESTION";
 	case TOK_COLON: return "TOK_COLON";
 	case TOK_SEMICOLON: return "TOK_SEMICOLON";
