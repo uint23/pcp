@@ -3,7 +3,6 @@
 
 #include "common.h"
 
-/* Every token type. Expanded into TokenType here and the name table in lexer.c. */
 #define TOKEN_LIST(X) \
 	X(TOK_INVALID) \
 	X(TOK_EOF) \

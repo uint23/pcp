@@ -424,3 +424,4 @@ const char* lexer_nametok(TokenType type)
 
 	return "TOK_UNKNOWN";
 }
+
