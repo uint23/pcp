@@ -16,6 +16,14 @@ typedef enum {
 } ASTType;
 
 typedef struct AST AST;
+typedef struct ASTList ASTList;
+
+struct ASTList {
+	AST**  items;
+	size_t count;
+	size_t capacity;
+};
+
 struct AST {
 	ASTType type;
 
@@ -32,15 +40,8 @@ struct AST {
 			AST* expr;
 		} return_st;
 
-		struct {
-			AST**  items;
-			size_t count;
-		} block;
-
-		struct {
-			AST**  items;
-			size_t count;
-		}root;
+		ASTList root;
+		ASTList block;
 
 		struct {
 			Token name;
@@ -55,6 +56,9 @@ AST* ast_new(ASTType type);
 /* recursively destroy an ast tree from
    node provided */
 void ast_destroy(AST* ast);
+
+/* append a node to an ASTList */
+void ast_list_append(ASTList* list, AST* node);
 
 #endif /* AST_H */
 
