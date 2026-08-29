@@ -39,6 +39,9 @@ $(LEXER_TEST_OUT): $(LEXER_TEST_SRC) $(TEST_HDR) Makefile
 test: $(LEXER_TEST_OUT)
 	$(LEXER_TEST_OUT)
 
+debug: CFLAGS += -g -O0 -DDEBUG
+debug: all
+
 clean:
 	rm -f $(OUT) $(LEXER_TEST_OUT)
 
