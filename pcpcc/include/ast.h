@@ -60,5 +60,8 @@ void ast_destroy(AST* ast);
 /* append a node to an ASTList */
 void ast_list_append(ASTList* list, AST* node);
 
+/* print AST at depth to stdout */
+void ast_print(AST* ast, int depth);
+
 #endif /* AST_H */
 

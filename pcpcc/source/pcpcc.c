@@ -100,6 +100,7 @@ int main(int argc, char* argv[])
 	parser_init(&source);
 	ast = parser_parse();
 
+	ast_print(ast, 0);
 	ast_destroy(ast);
 	close_source(&source);
 
