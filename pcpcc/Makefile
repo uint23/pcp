@@ -20,7 +20,7 @@ BUILD_DIR = ../build/pcpcc
 OUT = $(BUILD_DIR)/pcpcc
 LEXER_TEST_OUT = $(BUILD_DIR)/lexer_test
 
-all: $(OUT) $(LEXER_TEST_OUT)
+all: $(OUT)
 
 $(OUT): $(SRC) $(HDR) Makefile
 	mkdir -p $(BUILD_DIR)
