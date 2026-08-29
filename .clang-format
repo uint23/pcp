@@ -9,6 +9,7 @@ BreakBeforeBraces: Custom
 BraceWrapping:
   AfterFunction: true
   AfterControlStatement: false
+  BeforeElse: true
 AllowShortFunctionsOnASingleLine: None
 
 BreakBeforeBinaryOperators: None

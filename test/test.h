@@ -21,7 +21,7 @@
 	printf(COLOR_YELLOW "[ SKIP ]" COLOR_RESET " %s\n", name)
 
 #define PRINT_ASSERT_FAILED(file, line, expression) \
-	printf("         %s:%d: assertion failed: %s\n", file, line, expression)
+	printf("\t%s:%d: assertion failed: %s\n", file, line, expression)
 
 #define PRINT_SUMMARY(total, passed, failed) \
 	printf("%s%lu tests: %lu passed, %lu failed" COLOR_RESET "\n", \
@@ -30,12 +30,12 @@
 
 typedef struct {
 	const char* name;
-	int failed;
+	int	    failed;
 } TestContext;
 
 typedef void (*TestFunction)(TestContext* test);
 typedef struct {
-	char* name;
+	char*	     name;
 	TestFunction function;
 } Test;
 
@@ -49,7 +49,7 @@ int run_test(const char* name, TestFunction function);
 #define TEST(name) static void name(TestContext* test)
 
 #define TEST_DECLARE(name) static void name(TestContext* test);
-#define TEST_ENTRY(name)   { #name, name },
+#define TEST_ENTRY(name) {#name, name},
 
 #define REGISTER_TESTS() \
 	TEST_LIST(TEST_DECLARE) \

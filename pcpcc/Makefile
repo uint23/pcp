@@ -13,7 +13,7 @@ HDR = include/common.h \
       include/utils.h
 
 LEXER_TEST_SRC = ../test/test.c \
-	       tests/lexer_test.c
+	             tests/lexer_test.c
 TEST_HDR = ../test/test.h
 
 BUILD_DIR = ../build/pcpcc
