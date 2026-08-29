@@ -30,12 +30,12 @@
 
 typedef struct {
 	const char* name;
-	int	    failed;
+	int         failed;
 } TestContext;
 
 typedef void (*TestFunction)(TestContext* test);
 typedef struct {
-	char*	     name;
+	const char*  name;
 	TestFunction function;
 } Test;
 
@@ -43,7 +43,7 @@ extern Test tests[];
 extern size_t test_count;
 
 void test_assert(TestContext* test, int condition, const char* expression,
-		 const char* file, int line);
+                 const char* file, int line);
 int run_test(const char* name, TestFunction function);
 
 #define TEST(name) static void name(TestContext* test)

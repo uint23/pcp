@@ -1,4 +1,5 @@
 #include "test.h"
+
 #include <stdio.h>
 
 void test_assert(TestContext* test, int condition, const char* expression,
