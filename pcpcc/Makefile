@@ -7,11 +7,13 @@ TEST_CPPFLAGS = $(CPPFLAGS) -I../test
 
 SRC = source/ast.c \
       source/lexer.c \
+      source/parser.c \
       source/pcpcc.c \
       source/utils.c
 HDR = include/ast.h \
       include/common.h \
       include/lexer.h \
+      include/parser.h \
       include/utils.h
 
 LEXER_TEST_SRC = ../test/test.c \
