@@ -5,10 +5,12 @@ CFLAGS = -ansi -pedantic -Wall -Wextra
 CPPFLAGS = -Iinclude
 TEST_CPPFLAGS = $(CPPFLAGS) -I../test
 
-SRC = source/pcpcc.c \
+SRC = source/ast.c \
       source/lexer.c \
+      source/pcpcc.c \
       source/utils.c
-HDR = include/common.h \
+HDR = include/ast.h \
+      include/common.h \
       include/lexer.h \
       include/utils.h
 
