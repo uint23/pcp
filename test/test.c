@@ -1,9 +1,9 @@
-#include "test.h"
-
 #include <stdio.h>
 
+#include "test.h"
+
 void test_assert(TestContext* test, int condition, const char* expression,
-		 const char* file, int line)
+                 const char* file, int line)
 {
 	if (condition)
 		return;
