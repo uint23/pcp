@@ -5,7 +5,7 @@
 
 static char advance(void);
 static Token character(void);
-static void comment(void);
+static int comment(void);
 static int eof(void);
 static Token identifier(void);
 static int match(char c);
@@ -88,8 +88,9 @@ static Token character(void)
 }
 
 /* get end half of a comment; the first half is
-   handled in lexer_next */
-static void comment(void)
+   handled in lexer_next. Returns 0 if EOF is reached before the
+   comment is closed. */
+static int comment(void)
 {
 	advance(); /* consoom '*' */
 
@@ -97,11 +98,13 @@ static void comment(void)
 		if (peek() == '*' && lexer.source->data[lexer.pos + 1] == '/') {
 			advance();
 			advance();
-			return;
+			return 1;
 		}
 
 		advance();
 	}
+
+	return 0;
 }
 
 static int eof(void)
@@ -352,7 +355,8 @@ Token lexer_next(void)
 		if (match('='))
 			return mktok(TOK_ASSIGN_DIV);
 		if (peek() == '*') {
-			comment();
+			if (!comment())
+				return mktok(TOK_INVALID);
 			/* skip */
 			return lexer_next();
 		}
