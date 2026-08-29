@@ -6,6 +6,7 @@
 #include "utils.h"
 
 static void advance(void);
+static AST* block(void);
 static void expect(TokenType type);
 static AST* function(void);
 static int match(TokenType type);
@@ -19,6 +20,16 @@ static void advance(void)
 {
 	parser.prv = parser.cur;
 	parser.cur = lexer_next();
+}
+
+static AST* block(void)
+{
+	AST* node = ast_new(AST_BLOCK);
+
+	expect(TOK_BRACEL);
+	expect(TOK_BRACER);
+
+	return node;
 }
 
 static void expect(TokenType type)
@@ -42,7 +53,7 @@ static AST* function(void)
 	expect(TOK_VOID);
 	expect(TOK_PARENR);
 
-	/* TODO body */
+	node->data.function.body = block();
 
 	return node;
 }
