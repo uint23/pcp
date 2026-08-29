@@ -49,5 +49,12 @@ struct AST {
 	} data;
 };
 
+/* allocate a new ast node */
+AST* ast_new(ASTType type);
+
+/* recursively destroy an ast tree from
+   node provided */
+void ast_destroy(AST* ast);
+
 #endif /* AST_H */
 
