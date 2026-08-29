@@ -57,12 +57,12 @@ int run_test(const char* name, TestFunction function);
 	size_t test_count = sizeof(tests) / sizeof(tests[0]);
 
 #define ASSERT(expression) \
-	test_assert(test, (expression) != 0, #expression, __FILE__, __LINE__);
+	test_assert(test, (expression) != 0, #expression, __FILE__, __LINE__)
 #define EXPECT_EQ(expression1, expression2) \
 	ASSERT((expression1) == (expression2))
 #define EXPECT_NE(expression1, expression2) \
 	ASSERT((expression1) != (expression2))
-#define TEST_FAILED(message) test_assert(test, 0, message, __FILE__, __LINE__);
+#define TEST_FAILED(message) test_assert(test, 0, message, __FILE__, __LINE__)
 
 #endif /* TEST_H */
 

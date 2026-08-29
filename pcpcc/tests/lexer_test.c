@@ -14,6 +14,6 @@ TEST(lex_numbers)
 TEST(lex_strings)
 {
 	/* body */
-	TEST_FAILED("Not implemented")
+	TEST_FAILED("Not implemented");
 }
 
