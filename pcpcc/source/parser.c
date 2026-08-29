@@ -10,6 +10,8 @@ static AST* block(void);
 static void expect(TokenType type);
 static AST* function(void);
 static int match(TokenType type);
+static AST* statement(void);
+static AST* statement_return(void);
 
 static struct {
 	Token cur;
@@ -25,8 +27,13 @@ static void advance(void)
 static AST* block(void)
 {
 	AST* node = ast_new(AST_BLOCK);
+	AST* stmt = NULL;
 
 	expect(TOK_BRACEL);
+	while (parser.cur.type != TOK_BRACER) {
+		stmt = statement();
+		ast_list_append(&node->data.block, stmt);
+	}
 	expect(TOK_BRACER);
 
 	return node;
@@ -65,6 +72,33 @@ static int match(TokenType type)
 
 	advance();
 	return 1;
+}
+
+/* match a token to a statement */
+static AST* statement(void)
+{
+	if (match(TOK_RETURN))
+		return statement_return();
+
+	die(ERR_PARSE_EXPECTED_TOKEN, "Expected statement, got %s",
+	    lexer_nametok(parser.cur.type));
+
+	return NULL;
+}
+
+static AST* statement_return(void)
+{
+	AST* node = ast_new(AST_RETURN);
+	AST* expr = ast_new(AST_LITERAL);
+
+	expr->data.token = parser.cur;
+	expect(TOK_INT_LITERAL);
+
+	node->data.return_st.expr = expr;
+
+	expect(TOK_SEMICOLON);
+
+	return node;
 }
 
 void parser_init(SourceFile* source)

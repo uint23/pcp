@@ -79,7 +79,7 @@ static void close_source(SourceFile* source)
 int main(int argc, char* argv[])
 {
 	SourceFile source = { 0 };
-	Token token;
+	/* Token token; */
 	AST* ast;
 
 	parse_args(argc, argv);

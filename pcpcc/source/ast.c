@@ -107,6 +107,17 @@ void ast_print(AST* ast, int depth)
 			ast_print(ast->data.block.items[i], depth + 1);
 		break;
 
+	case AST_RETURN:
+		printf("RETURN\n");
+		ast_print(ast->data.return_st.expr, depth + 1);
+		break;
+
+	case AST_LITERAL:
+		printf("LITERAL ");
+		fwrite(ast->data.token.start, 1, ast->data.token.len, stdout);
+		putchar('\n');
+		break;
+
 	default:
 		printf("UNKNOWN\n");
 		break;
