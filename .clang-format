@@ -1,6 +1,6 @@
 IndentWidth: 8
 TabWidth: 8
-UseTab: Always
+UseTab: AlignWithSpaces
 
 PointerAlignment: Left
 SpaceBeforeParens: ControlStatements
@@ -9,6 +9,7 @@ BreakBeforeBraces: Custom
 BraceWrapping:
   AfterFunction: true
   AfterControlStatement: false
+  BeforeElse: true
 AllowShortFunctionsOnASingleLine: None
 
 BreakBeforeBinaryOperators: None
@@ -19,4 +20,13 @@ InsertNewlineAtEOF: true
 MaxEmptyLinesToKeep: 1
 KeepEmptyLines:
   AtEndOfFile: true
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:    '^<(assert|ctype|errno|float|limits|locale|math|setjmp|signal|stdarg|stddef|stdio|stdlib|string|time)\.h>$'
+    Priority: 1
+  - Regex:    '^<.*>$'
+    Priority: 2
+  - Regex:    '^".*"$'
+    Priority: 3
 
