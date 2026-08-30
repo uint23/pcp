@@ -8,6 +8,7 @@
 static void advance(void);
 static AST* block(void);
 static void expect(TokenType type);
+static AST* expression(void);
 static AST* function(void);
 static int match(TokenType type);
 static AST* statement(void);
@@ -46,6 +47,16 @@ static void expect(TokenType type)
 		    lexer_nametok(type), lexer_nametok(parser.cur.type));
 
 	advance();
+}
+
+static AST* expression(void)
+{
+	AST* node = ast_new(AST_LITERAL);
+	node->data.token = parser.cur;
+
+	expect(TOK_INT_LITERAL);
+
+	return node;
 }
 
 static AST* function(void)
@@ -89,12 +100,8 @@ static AST* statement(void)
 static AST* statement_return(void)
 {
 	AST* node = ast_new(AST_RETURN);
-	AST* expr = ast_new(AST_LITERAL);
 
-	expr->data.token = parser.cur;
-	expect(TOK_INT_LITERAL);
-
-	node->data.return_st.expr = expr;
+	node->data.return_st.expr = expression();
 
 	expect(TOK_SEMICOLON);
 
