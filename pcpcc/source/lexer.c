@@ -88,8 +88,8 @@ static Token character(void)
 }
 
 /* get end half of a comment; the first half is
-   handled in lexer_next. Returns 0 if EOF is reached before the
-   comment is closed. */
+   handled in lexer_next. returns 0 if EOF is
+   reached before the comment is closed */
 static int comment(void)
 {
 	advance(); /* consoom '*' */

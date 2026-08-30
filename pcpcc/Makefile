@@ -16,7 +16,7 @@ LEXER_TEST_SRC = ../test/test.c \
                  source/lexer.c \
                  tests/lexer_test.c
 TEST_HDR = ../test/test.h \
-		   include/common.h
+           include/common.h
 
 BUILD_DIR = ../build/pcpcc
 OUT = $(BUILD_DIR)/pcpcc

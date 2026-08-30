@@ -37,10 +37,10 @@
 	F(X, keyword_void, "void", TOK_VOID) \
 	F(X, keyword_volatile, "volatile", TOK_VOLATILE) \
 	F(X, keyword_while, "while", TOK_WHILE) \
-\
+	\
 	F(X, identifier, "foo", TOK_IDENTIFIER) \
 	F(X, identifier_underscore, "_bar2", TOK_IDENTIFIER) \
-\
+	\
 	F(X, decimal, "67", TOK_INT_LITERAL) \
 	F(X, hexadecimal, "0x67", TOK_INT_LITERAL) \
 	F(X, octal_looking, "067", TOK_INT_LITERAL) \
@@ -52,26 +52,26 @@
 	F(X, float_exponent, "1e3", TOK_FLOAT_LITERAL) \
 	F(X, float_suffix_f, "10.1f", TOK_FLOAT_LITERAL) \
 	F(X, float_suffix_l, "10.1l", TOK_FLOAT_LITERAL) \
-\
+	\
 	F(X, char_literal, "'a'", TOK_CHAR_LITERAL) \
 	F(X, char_escaped, "'\\n'", TOK_CHAR_LITERAL) \
 	F(X, string_literal, "\"hi\"", TOK_STRING_LITERAL) \
 	F(X, string_escaped_quote, "\"a\\\"b\"", TOK_STRING_LITERAL) \
-\
+	\
 	F(X, bracket_l, "[", TOK_BRACKL) \
 	F(X, bracket_r, "]", TOK_BRACKR) \
 	F(X, paren_l, "(", TOK_PARENL) \
 	F(X, paren_r, ")", TOK_PARENR) \
 	F(X, brace_l, "{", TOK_BRACEL) \
 	F(X, brace_r, "}", TOK_BRACER) \
-\
+	\
 	F(X, dot, ".", TOK_DOT) \
 	F(X, ellipsis, "...", TOK_DOTDOTDOT) \
 	F(X, arrow, "->", TOK_ARROW) \
-\
+	\
 	F(X, increment, "++", TOK_INCREMENT) \
 	F(X, decrement, "--", TOK_DECREMENT) \
-\
+	\
 	F(X, star, "*", TOK_STAR) \
 	F(X, plus, "+", TOK_PLUS) \
 	F(X, minus, "-", TOK_MINUS) \
@@ -79,27 +79,27 @@
 	F(X, bang, "!", TOK_BANG) \
 	F(X, slash, "/", TOK_SLASH) \
 	F(X, percent, "%", TOK_PERCENT) \
-\
+	\
 	F(X, shl, "<<", TOK_SHL) \
 	F(X, shr, ">>", TOK_SHR) \
-\
+	\
 	F(X, lt, "<", TOK_LT) \
 	F(X, gt, ">", TOK_GT) \
 	F(X, le, "<=", TOK_LE) \
 	F(X, ge, ">=", TOK_GE) \
 	F(X, eq, "==", TOK_EQ) \
 	F(X, ne, "!=", TOK_NE) \
-\
+	\
 	F(X, xor_bit, "^", TOK_XOR_BIT) \
 	F(X, or_bit, "|", TOK_OR_BIT) \
 	F(X, and_bit, "&", TOK_AND_BIT) \
 	F(X, or_logical, "||", TOK_OR_LOGICAL) \
 	F(X, and_logical, "&&", TOK_AND_LOGICAL) \
-\
+	\
 	F(X, question, "?", TOK_QUESTION) \
 	F(X, colon, ":", TOK_COLON) \
 	F(X, semicolon, ";", TOK_SEMICOLON) \
-\
+	\
 	F(X, assign, "=", TOK_ASSIGN) \
 	F(X, assign_mul, "*=", TOK_ASSIGN_MUL) \
 	F(X, assign_div, "/=", TOK_ASSIGN_DIV) \
@@ -111,7 +111,7 @@
 	F(X, assign_xor, "^=", TOK_ASSIGN_XOR) \
 	F(X, assign_and, "&=", TOK_ASSIGN_AND) \
 	F(X, assign_or, "|=", TOK_ASSIGN_OR) \
-\
+	\
 	F(X, comma, ",", TOK_COMMA) \
 	F(X, hash, "#", TOK_HASH) \
 	F(X, hashhash, "##", TOK_HASHHASH)
