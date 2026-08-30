@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "lexer.h"
+#include "parser.h"
 #include "utils.h"
 
 #ifndef PCPCC_VERSION
@@ -78,13 +79,15 @@ static void close_source(SourceFile* source)
 int main(int argc, char* argv[])
 {
 	SourceFile source = { 0 };
-	Token token;
+	/* Token token; */
+	AST* ast;
 
 	parse_args(argc, argv);
 	open_source(&source, argv[1]);
 	read_source(&source);
-	printf("%s", source.data);
 
+#if 0
+	printf("%s", source.data);
 	lexer_init(&source);
 	printf("TOKEN\tNAME\t\tVALUE\n");
 	do { /* file can be just EOF */
@@ -93,7 +96,12 @@ int main(int argc, char* argv[])
 		fwrite(token.start, 1, token.len, stdout);
 		putchar('\n');
 	} while (token.type != TOK_EOF);
+#endif
+	parser_init(&source);
+	ast = parser_parse();
 
+	ast_print(ast, 0);
+	ast_destroy(ast);
 	close_source(&source);
 
 	return ERR_OK;

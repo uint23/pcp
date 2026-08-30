@@ -5,11 +5,15 @@ CFLAGS = -ansi -pedantic -Wall -Wextra
 CPPFLAGS = -Iinclude
 TEST_CPPFLAGS = $(CPPFLAGS) -I../test
 
-SRC = source/pcpcc.c \
+SRC = source/ast.c \
       source/lexer.c \
+      source/parser.c \
+      source/pcpcc.c \
       source/utils.c
-HDR = include/common.h \
+HDR = include/ast.h \
+      include/common.h \
       include/lexer.h \
+      include/parser.h \
       include/utils.h
 
 LEXER_TEST_SRC = ../test/test.c \
@@ -34,6 +38,9 @@ $(LEXER_TEST_OUT): $(LEXER_TEST_SRC) $(TEST_HDR) Makefile
 
 test: $(LEXER_TEST_OUT)
 	$(LEXER_TEST_OUT)
+
+debug: CFLAGS += -g -O0 -DDEBUG
+debug: all
 
 clean:
 	rm -f $(OUT) $(LEXER_TEST_OUT)

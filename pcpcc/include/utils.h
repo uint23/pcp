@@ -11,6 +11,8 @@ typedef enum {
 
 	ERR_SRC_DATA_LEN_DIFFERENT,
 
+	ERR_PARSE_EXPECTED_TOKEN,
+
 	ErrorLast
 } ErrorCode;
 
