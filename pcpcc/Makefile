@@ -13,8 +13,10 @@ HDR = include/common.h \
       include/utils.h
 
 LEXER_TEST_SRC = ../test/test.c \
+                 source/lexer.c \
                  tests/lexer_test.c
-TEST_HDR = ../test/test.h
+TEST_HDR = ../test/test.h \
+           include/common.h
 
 BUILD_DIR = ../build/pcpcc
 OUT = $(BUILD_DIR)/pcpcc
@@ -36,5 +38,15 @@ test: $(LEXER_TEST_OUT)
 clean:
 	rm -f $(OUT) $(LEXER_TEST_OUT)
 
-.PHONY: all clean test
+compdb:
+	@emit() { \
+		for f in $$1; do \
+			printf '{"directory": "%s", "file": "%s", "command": "%s %s %s -c %s"},\n' \
+				"$$(pwd)" "$$f" "$(CC)" "$$2" "$(CFLAGS)" "$$f"; \
+		done; \
+	}; \
+	emit "$(SRC)" "$(CPPFLAGS)"; \
+	emit "$(LEXER_TEST_SRC)" "$(TEST_CPPFLAGS)"
+
+.PHONY: all clean test compdb
 

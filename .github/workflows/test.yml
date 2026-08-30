@@ -1,0 +1,22 @@
+name: test
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: |
+          set -o pipefail
+          make test 2>&1 | tee test-output.txt
+      - name: Add test output to summary
+        if: always()
+        run: |
+          {
+            echo '### Test output'
+            echo '```'
+            sed -E 's/\x1b\[[0-9;]*m//g' test-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
