@@ -1,6 +1,6 @@
 int main(void)
 {
-	return 1337;
+	return (1 + 2) * (3 - 4);
 }
 
 int foo(void)
