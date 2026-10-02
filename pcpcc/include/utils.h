@@ -15,7 +15,7 @@ typedef enum {
 
 	ERR_PARSE_EXPECTED_TOKEN,
 
-	ErrorLast
+	ERR_LAST
 } ErrorCode;
 
 /* print message and die with errorcode ec */
