@@ -78,22 +78,32 @@ static void close_source(SourceFile* source)
 int main(int argc, char* argv[])
 {
 	IRFunction fn = { 0 };
-	IRBlock* block = NULL;
-	IRInstruction* ins = NULL;
+	IRBlock* block;
+	IRInstruction* ins;
 
-	block = ir_add_block(&fn);
+	fn.name = "main";
+	fn.type = IR_I32;
+	block = ir_add_block(&fn, "start");
 
 	ins = ir_add_instruction(block);
 	ins->opr = IR_OPR_ADD;
 	ins->type = IR_I32;
 	ins->res = fn.nextval++;
-
 	ins->opd[0].type = IR_OPD_INTEGER;
 	ins->opd[0].data.integer = 10;
 	ins->opd[1].type = IR_OPD_INTEGER;
 	ins->opd[1].data.integer = 20;
 
-	ir_print_instruction(ins);
+	ins = ir_add_instruction(block);
+	ins->opr = IR_OPR_MUL;
+	ins->type = IR_I32;
+	ins->res = fn.nextval++;
+	ins->opd[0].type = IR_OPD_VALUE;
+	ins->opd[0].data.value = 0;
+	ins->opd[1].type = IR_OPD_INTEGER;
+	ins->opd[1].data.integer = 2;
+
+	ir_print_function(&fn);
 
 	free(block->ins);
 	free(fn.blocks);

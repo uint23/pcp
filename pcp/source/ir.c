@@ -36,7 +36,7 @@ static void print_type(IRType type)
 	}
 }
 
-IRBlock* ir_add_block(IRFunction* fn)
+IRBlock* ir_add_block(IRFunction* fn, const char* name)
 {
 	IRBlock* block;
 
@@ -44,6 +44,7 @@ IRBlock* ir_add_block(IRFunction* fn)
 		fn->blocks = list_grow(fn->blocks, sizeof(*fn->blocks), &fn->cap);
 
 	block = &fn->blocks[fn->cnt++];
+	block->name = name;
 	block->ins = NULL;
 	block->cnt = 0;
 	block->cap = 0;
@@ -65,9 +66,33 @@ IRInstruction* ir_add_instruction(IRBlock* block)
 	return ins;
 }
 
+void ir_print_block(IRBlock* block)
+{
+	size_t i;
+
+	for (i = 0; i < block->cnt; i++)
+		ir_print_instruction(&block->ins[i]);
+}
+
+void ir_print_function(IRFunction* fn)
+{
+	size_t i;
+
+	printf("fn ");
+	print_type(fn->type);
+	printf(" %s() {\n", fn->name);
+
+	for (i = 0; i < fn->cnt; i++) {
+		printf("%s():\n", fn->blocks[i].name);
+		ir_print_block(&fn->blocks[i]);
+	}
+
+	printf("}\n");
+}
+
 void ir_print_instruction(IRInstruction* ins)
 {
-	printf("_%u: ", ins->res);
+	printf("  _%u: ", ins->res);
 	print_type(ins->type);
 	printf(" = ");
 
