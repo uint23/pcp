@@ -57,5 +57,18 @@ typedef struct {
 	size_t         cap;
 } IRBlock;
 
+typedef struct {
+	IRBlock* blocks;
+	size_t   cnt;
+	size_t   cap;
+	IRValue  nextval;
+} IRFunction;
+
+IRBlock* ir_add_block(IRFunction* fn);
+
+IRInstruction* ir_add_instruction(IRBlock* block);
+
+void ir_print_instruction(IRInstruction* ins);
+
 #endif /* IR_H */
 

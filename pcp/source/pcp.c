@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "common.h"
+#include "ir.h"
 #include "utils.h"
 
 #ifndef PCP_VERSION
@@ -76,6 +77,35 @@ static void close_source(SourceFile* source)
 
 int main(int argc, char* argv[])
 {
+	IRFunction fn = { 0 };
+	IRBlock* block = NULL;
+	IRInstruction* ins = NULL;
+
+	block = ir_add_block(&fn);
+
+	ins = ir_add_instruction(block);
+	ins->opr = IR_OPR_ADD;
+	ins->type = IR_I32;
+	ins->res = fn.nextval++;
+
+	ins->opd[0].type = IR_OPD_INTEGER;
+	ins->opd[0].data.integer = 10;
+	ins->opd[1].type = IR_OPD_INTEGER;
+	ins->opd[1].data.integer = 20;
+
+	ir_print_instruction(ins);
+
+	free(block->ins);
+	free(fn.blocks);
+
+	return ERR_OK;
+	(void) parse_args;
+	(void) open_source;
+	(void) read_source;
+	(void) close_source;
+	(void) argc;
+	(void) argv;
+#if 0
 	SourceFile source = { 0 };
 
 	parse_args(argc, argv);
@@ -84,5 +114,6 @@ int main(int argc, char* argv[])
 
 	close_source(&source);
 	return ERR_OK;
+#endif
 }
 

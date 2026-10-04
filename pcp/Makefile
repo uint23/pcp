@@ -4,9 +4,11 @@ CC = cc
 CFLAGS = -ansi -pedantic -Wall -Wextra
 CPPFLAGS = -Iinclude
 
-SRC = source/pcp.c \
+SRC = source/ir.c \
+      source/pcp.c \
       source/utils.c
 HDR = include/common.h \
+      include/ir.h \
       include/utils.h
 
 BUILD_DIR = ../build/pcp
