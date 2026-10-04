@@ -37,6 +37,17 @@ static void print_type(IRType type)
 	}
 }
 
+static void print_operands(IROperandSet* set)
+{
+	size_t i = 0;
+	for (i = 0; i < set->cnt; i++) {
+		if (i)
+			printf(", ");
+
+		print_operand(&set->opds[i]);
+	}
+}
+
 static void print_params(IRParameterSet* set)
 {
 	size_t i;
@@ -85,24 +96,35 @@ IRInstruction* ir_add_instruction(IRBlock* block)
 	return ins;
 }
 
-IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* pset, IRType type)
+IROperand* ir_add_operand(IROperandSet* set)
+{
+	IROperand* opd;
+
+	if (set->cnt >= set->cap)
+		set->opds = list_grow(set->opds, sizeof(*set->opds), &set->cap);
+
+	opd = &set->opds[set->cnt++];
+
+	return opd;
+}
+
+IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* set, IRType type)
 {
 	IRParameter* param;
 
-	if (pset->cnt >= pset->cap)
-		pset->params = list_grow(pset->params, sizeof(*pset->params), &pset->cap);
+	if (set->cnt >= set->cap)
+		set->params = list_grow(set->params, sizeof(*set->params), &set->cap);
 
-	param = &pset->params[pset->cnt++];
+	param = &set->params[set->cnt++];
 	param->type = type;
 	param->value = fn->nextval++;
 
 	return param;
 }
 
-void ir_print_block(IRBlock* block)
+void ir_print_block(IRFunction* fn, IRBlock* block)
 {
 	size_t i;
-
 	for (i = 0; i < block->cnt; i++)
 		ir_print_instruction(&block->ins[i]);
 
@@ -118,6 +140,12 @@ void ir_print_block(IRBlock* block)
 
 		putchar('\n');
 		break;
+	case IR_TERM_JMP:
+		printf("  jmp %s(", fn->blocks[block->term.data.jmp.block].name);
+		print_operands(&block->term.data.jmp.args);
+
+	printf(")\n");
+	break;
 
 	case IR_TERM_NONE:
 	case IR_TERM_LAST:
@@ -141,7 +169,7 @@ void ir_print_function(IRFunction* fn)
 		printf("%s(", fn->blocks[i].name);
 		print_params(&fn->blocks[i].params);
 		printf("):\n");
-		ir_print_block(&fn->blocks[i]);
+		ir_print_block(fn, &fn->blocks[i]);
 	}
 
 	printf("}\n");

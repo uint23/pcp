@@ -42,7 +42,9 @@ typedef enum {
 	IR_OPD_LAST
 } IROperandType;
 
+typedef size_t IRBlockRef;
 typedef unsigned IRValue;
+
 typedef struct {
 	IROperandType type;
 
@@ -52,6 +54,12 @@ typedef struct {
 	} data;
 
 } IROperand;
+
+typedef struct {
+	IROperand* opds;
+	size_t     cnt;
+	size_t     cap;
+} IROperandSet;
 
 typedef struct {
 	IROperatorType opr;
@@ -72,6 +80,11 @@ typedef struct {
 } IRParameterSet;
 
 typedef struct {
+	IRBlockRef   block;
+	IROperandSet args;
+} IRTarget;
+
+typedef struct {
 	IRTerminatorType type;
 
 	union {
@@ -80,7 +93,8 @@ typedef struct {
 			IROperand value;
 		} ret;
 
-		/* XXX: jmp, br */
+		IRTarget jmp;
+		IRTarget br;
 	} data;
 } IRTerminator;
 
@@ -105,8 +119,9 @@ typedef struct {
 
 IRBlock* ir_add_block(IRFunction* fn, const char* name);
 IRInstruction* ir_add_instruction(IRBlock* block);
-IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* pset, IRType type);
-void ir_print_block(IRBlock* block);
+IROperand* ir_add_operand(IROperandSet* set);
+IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* set, IRType type);
+void ir_print_block(IRFunction* fn, IRBlock* block);
 void ir_print_function(IRFunction* fn);
 void ir_print_instruction(IRInstruction* ins);
 

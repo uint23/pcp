@@ -78,44 +78,45 @@ static void close_source(SourceFile* source)
 int main(int argc, char* argv[])
 {
 	IRFunction fn = { 0 };
-	IRBlock* block;
-	IRInstruction* ins;
+	IRBlockRef startref;
+	IRBlockRef endref;
+	IRBlock* start;
+	IRBlock* end;
+	IROperand* opd;
 
 	fn.name = "main";
 	fn.type = IR_I32;
-	block = ir_add_block(&fn, "start");
 
-	ir_add_param(&fn, &fn.params, IR_I32);
-	ir_add_param(&fn, &fn.params, IR_I32);
-	ir_add_param(&fn, &block->params, IR_I32);
-	ir_add_param(&fn, &block->params, IR_I32);
+	startref = fn.cnt;
+	ir_add_block(&fn, "start");
 
-	ins = ir_add_instruction(block);
-	ins->opr = IR_OPR_ADD;
-	ins->type = IR_I32;
-	ins->res = fn.nextval++;
-	ins->opd[0].type = IR_OPD_INTEGER;
-	ins->opd[0].data.integer = 10;
-	ins->opd[1].type = IR_OPD_INTEGER;
-	ins->opd[1].data.integer = 20;
+	endref = fn.cnt;
+	ir_add_block(&fn, "end");
 
-	ins = ir_add_instruction(block);
-	ins->opr = IR_OPR_MUL;
-	ins->type = IR_I32;
-	ins->res = fn.nextval++;
-	ins->opd[0].type = IR_OPD_VALUE;
-	ins->opd[0].data.value = 0;
-	ins->opd[1].type = IR_OPD_INTEGER;
-	ins->opd[1].data.integer = 2;
+	start = &fn.blocks[startref];
+	end = &fn.blocks[endref];
 
-	block->term.type = IR_TERM_RET;
-	block->term.data.ret.hasval = 1;
-	block->term.data.ret.value.type = IR_OPD_VALUE;
-	block->term.data.ret.value.data.value = 4;
+	ir_add_param(&fn, &end->params, IR_I32);
+
+	start->term.type = IR_TERM_JMP;
+	start->term.data.jmp.block = endref;
+	start->term.data.jmp.args.opds = NULL;
+	start->term.data.jmp.args.cnt = 0;
+	start->term.data.jmp.args.cap = 0;
+
+	opd = ir_add_operand(&start->term.data.jmp.args);
+	opd->type = IR_OPD_INTEGER;
+	opd->data.integer = 123;
+
+	end->term.type = IR_TERM_RET;
+	end->term.data.ret.hasval = 1;
+	end->term.data.ret.value.type = IR_OPD_VALUE;
+	end->term.data.ret.value.data.value = end->params.params[0].value;
 
 	ir_print_function(&fn);
 
-	free(block->ins);
+	free(start->term.data.jmp.args.opds);
+	free(end->params.params);
 	free(fn.blocks);
 
 	return ERR_OK;
