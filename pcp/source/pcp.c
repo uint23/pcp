@@ -85,6 +85,11 @@ int main(int argc, char* argv[])
 	fn.type = IR_I32;
 	block = ir_add_block(&fn, "start");
 
+	ir_add_param(&fn, &fn.params, IR_I32);
+	ir_add_param(&fn, &fn.params, IR_I32);
+	ir_add_param(&fn, &block->params, IR_I32);
+	ir_add_param(&fn, &block->params, IR_I32);
+
 	ins = ir_add_instruction(block);
 	ins->opr = IR_OPR_ADD;
 	ins->type = IR_I32;

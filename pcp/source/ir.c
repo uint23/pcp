@@ -6,6 +6,7 @@
 
 static void print_operand(IROperand* opd);
 static void print_type(IRType type);
+static void print_params(IRParameterSet* set);
 
 static void print_operand(IROperand* opd)
 {
@@ -36,6 +37,19 @@ static void print_type(IRType type)
 	}
 }
 
+static void print_params(IRParameterSet* set)
+{
+	size_t i;
+
+	for (i = 0; i < set->cnt; i++) {
+		if (i)
+			printf(", ");
+
+		printf("_%u: ", set->params[i].value);
+		print_type(set->params[i].type);
+	}
+}
+
 IRBlock* ir_add_block(IRFunction* fn, const char* name)
 {
 	IRBlock* block;
@@ -46,6 +60,9 @@ IRBlock* ir_add_block(IRFunction* fn, const char* name)
 	block = &fn->blocks[fn->cnt++];
 	block->name = name;
 	block->ins = NULL;
+	block->params.params = NULL;
+	block->params.cnt = 0;
+	block->params.cap = 0;
 	block->cnt = 0;
 	block->cap = 0;
 
@@ -61,9 +78,23 @@ IRInstruction* ir_add_instruction(IRBlock* block)
 
 	ins = &block->ins[block->cnt++];
 
-	/* XXX: initialise instruction here */
+	/* XXX: initialise instruction */
 
 	return ins;
+}
+
+IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* pset, IRType type)
+{
+	IRParameter* param;
+
+	if (pset->cnt >= pset->cap)
+		pset->params = list_grow(pset->params, sizeof(*pset->params), &pset->cap);
+
+	param = &pset->params[pset->cnt++];
+	param->type = type;
+	param->value = fn->nextval++;
+
+	return param;
 }
 
 void ir_print_block(IRBlock* block)
@@ -80,10 +111,15 @@ void ir_print_function(IRFunction* fn)
 
 	printf("fn ");
 	print_type(fn->type);
-	printf(" %s() {\n", fn->name);
+
+	printf(" %s(", fn->name);
+	print_params(&fn->params);
+	printf(") {\n");
 
 	for (i = 0; i < fn->cnt; i++) {
-		printf("%s():\n", fn->blocks[i].name);
+		printf("%s(", fn->blocks[i].name);
+		print_params(&fn->blocks[i].params);
+		printf("):\n");
 		ir_print_block(&fn->blocks[i]);
 	}
 

@@ -52,25 +52,38 @@ typedef struct {
 } IRInstruction;
 
 typedef struct {
+	IRType  type;
+	IRValue value;
+} IRParameter;
+
+typedef struct {
+	IRParameter* params;
+	size_t       cnt;
+	size_t       cap;
+} IRParameterSet;
+
+typedef struct {
 	const char*    name;
 	IRInstruction* ins;
+	IRParameterSet params;
 	size_t         cnt;
 	size_t         cap;
 	/* XXX: params */
 } IRBlock;
 
 typedef struct {
-	const char* name;
-	IRType      type;
-
-	IRBlock* blocks;
-	IRValue  nextval;
-	size_t   cnt;
-	size_t   cap;
+	const char*    name;
+	IRType         type;
+	IRParameterSet params;
+	IRBlock*       blocks;
+	IRValue        nextval;
+	size_t         cnt;
+	size_t         cap;
 } IRFunction;
 
 IRBlock* ir_add_block(IRFunction* fn, const char* name);
 IRInstruction* ir_add_instruction(IRBlock* block);
+IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* pset, IRType type);
 void ir_print_block(IRBlock* block);
 void ir_print_function(IRFunction* fn);
 void ir_print_instruction(IRInstruction* ins);
