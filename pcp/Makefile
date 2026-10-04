@@ -6,9 +6,11 @@ CPPFLAGS = -Iinclude
 
 SRC = source/ir.c \
       source/pcp.c \
+      source/print.c \
       source/utils.c
 HDR = include/common.h \
       include/ir.h \
+      include/print.h \
       include/utils.h
 
 BUILD_DIR = ../build/pcp

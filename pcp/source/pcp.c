@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "ir.h"
+#include "print.h"
 #include "utils.h"
 
 #ifndef PCP_VERSION
@@ -113,7 +114,7 @@ int main(int argc, char* argv[])
 	end->term.data.ret.value.type = IR_OPD_VALUE;
 	end->term.data.ret.value.data.value = end->params.params[0].value;
 
-	ir_print_function(&fn);
+	print_function(&fn);
 
 	free(start->term.data.jmp.args.opds);
 	free(end->params.params);

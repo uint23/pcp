@@ -121,9 +121,6 @@ IRBlock* ir_add_block(IRFunction* fn, const char* name);
 IRInstruction* ir_add_instruction(IRBlock* block);
 IROperand* ir_add_operand(IROperandSet* set);
 IRParameter* ir_add_param(IRFunction* fn, IRParameterSet* set, IRType type);
-void ir_print_block(IRFunction* fn, IRBlock* block);
-void ir_print_function(IRFunction* fn);
-void ir_print_instruction(IRInstruction* ins);
 
 #endif /* IR_H */
 
