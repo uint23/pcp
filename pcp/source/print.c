@@ -21,12 +21,27 @@ void print_block(IRFunction* fn, IRBlock* block)
 
 		putchar('\n');
 		break;
+
 	case IR_TERM_JMP:
 		printf("  jmp %s(", fn->blocks[block->term.data.jmp.block].name);
 		print_operands(&block->term.data.jmp.args);
+		break;
 
-	printf(")\n");
-	break;
+	case IR_TERM_BR:
+		printf("  br ");
+		print_operand(&block->term.data.br.cond);
+
+		printf(", %s(", fn->blocks[block->term.data.br.yes.block].name);
+		print_operands(&block->term.data.br.yes.args);
+
+		printf("), %s(", fn->blocks[block->term.data.br.no.block].name);
+		print_operands(&block->term.data.br.no.args);
+
+		printf(")\n");
+		break;
+
+		printf(")\n");
+		break;
 
 	case IR_TERM_NONE:
 	case IR_TERM_LAST:

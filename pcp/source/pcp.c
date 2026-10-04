@@ -80,44 +80,66 @@ int main(int argc, char* argv[])
 {
 	IRFunction fn = { 0 };
 	IRBlockRef startref;
-	IRBlockRef endref;
+	IRBlockRef yesref;
+	IRBlockRef noref;
 	IRBlock* start;
-	IRBlock* end;
-	IROperand* opd;
+	IRBlock* yes;
+	IRBlock* no;
+
+	(void) argc;
+	(void) argv;
 
 	fn.name = "main";
 	fn.type = IR_I32;
 
+	/* fn i32 main(_0: i1) */
+	ir_add_param(&fn, &fn.params, IR_I1);
+
 	startref = fn.cnt;
 	ir_add_block(&fn, "start");
 
-	endref = fn.cnt;
-	ir_add_block(&fn, "end");
+	yesref = fn.cnt;
+	ir_add_block(&fn, "yes");
 
+	noref = fn.cnt;
+	ir_add_block(&fn, "no");
+
+	/* Reacquire after all block allocations. */
 	start = &fn.blocks[startref];
-	end = &fn.blocks[endref];
+	yes = &fn.blocks[yesref];
+	no = &fn.blocks[noref];
 
-	ir_add_param(&fn, &end->params, IR_I32);
+	/* br _0, yes(), no() */
+	start->term.type = IR_TERM_BR;
 
-	start->term.type = IR_TERM_JMP;
-	start->term.data.jmp.block = endref;
-	start->term.data.jmp.args.opds = NULL;
-	start->term.data.jmp.args.cnt = 0;
-	start->term.data.jmp.args.cap = 0;
+	start->term.data.br.cond.type = IR_OPD_VALUE;
+	start->term.data.br.cond.data.value = fn.params.params[0].value;
 
-	opd = ir_add_operand(&start->term.data.jmp.args);
-	opd->type = IR_OPD_INTEGER;
-	opd->data.integer = 123;
+	start->term.data.br.yes.block = yesref;
+	start->term.data.br.yes.args.opds = NULL;
+	start->term.data.br.yes.args.cnt = 0;
+	start->term.data.br.yes.args.cap = 0;
 
-	end->term.type = IR_TERM_RET;
-	end->term.data.ret.hasval = 1;
-	end->term.data.ret.value.type = IR_OPD_VALUE;
-	end->term.data.ret.value.data.value = end->params.params[0].value;
+	start->term.data.br.no.block = noref;
+	start->term.data.br.no.args.opds = NULL;
+	start->term.data.br.no.args.cnt = 0;
+	start->term.data.br.no.args.cap = 0;
+
+	/* yes(): ret 1 */
+	yes->term.type = IR_TERM_RET;
+	yes->term.data.ret.hasval = 1;
+	yes->term.data.ret.value.type = IR_OPD_INTEGER;
+	yes->term.data.ret.value.data.integer = 1;
+
+	/* no(): ret 0 */
+	no->term.type = IR_TERM_RET;
+	no->term.data.ret.hasval = 1;
+	no->term.data.ret.value.type = IR_OPD_INTEGER;
+	no->term.data.ret.value.data.integer = 0;
 
 	print_function(&fn);
 
-	free(start->term.data.jmp.args.opds);
-	free(end->params.params);
+	free(fn.params.params);
 	free(fn.blocks);
 
 	return ERR_OK;

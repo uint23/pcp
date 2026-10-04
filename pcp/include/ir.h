@@ -85,6 +85,12 @@ typedef struct {
 } IRTarget;
 
 typedef struct {
+	IROperand cond;
+	IRTarget  yes;
+	IRTarget  no;
+} IRBranch;
+
+typedef struct {
 	IRTerminatorType type;
 
 	union {
@@ -94,7 +100,7 @@ typedef struct {
 		} ret;
 
 		IRTarget jmp;
-		IRTarget br;
+		IRBranch br;
 	} data;
 } IRTerminator;
 
