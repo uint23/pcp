@@ -63,6 +63,8 @@ IRBlock* ir_add_block(IRFunction* fn, const char* name)
 	block->params.params = NULL;
 	block->params.cnt = 0;
 	block->params.cap = 0;
+	block->term.type = IR_TERM_NONE;
+	block->term.type = IR_TERM_NONE;
 	block->cnt = 0;
 	block->cap = 0;
 
@@ -103,6 +105,25 @@ void ir_print_block(IRBlock* block)
 
 	for (i = 0; i < block->cnt; i++)
 		ir_print_instruction(&block->ins[i]);
+
+	/* block end */
+	switch (block->term.type) {
+	case IR_TERM_RET:
+		printf("  ret");
+
+		if (block->term.data.ret.hasval) {
+			putchar(' ');
+			print_operand(&block->term.data.ret.value);
+		}
+
+		putchar('\n');
+		break;
+
+	case IR_TERM_NONE:
+	case IR_TERM_LAST:
+	default:
+		break;
+	}
 }
 
 void ir_print_function(IRFunction* fn)

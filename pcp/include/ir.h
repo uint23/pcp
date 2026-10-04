@@ -24,7 +24,16 @@ typedef enum {
 	IR_OPR_MUL,
 
 	IR_OPR_LAST
-} IROperator;
+} IROperatorType;
+
+typedef enum {
+	IR_TERM_NONE,
+	IR_TERM_RET,
+	IR_TERM_JMP,
+	IR_TERM_BR,
+
+	IR_TERM_LAST
+} IRTerminatorType;
 
 typedef enum {
 	IR_OPD_VALUE,
@@ -45,10 +54,10 @@ typedef struct {
 } IROperand;
 
 typedef struct {
-	IROperator opr;
-	IRType     type;
-	IRValue    res;
-	IROperand  opd[2];
+	IROperatorType opr;
+	IRType         type;
+	IRValue        res;
+	IROperand      opd[2];
 } IRInstruction;
 
 typedef struct {
@@ -63,12 +72,25 @@ typedef struct {
 } IRParameterSet;
 
 typedef struct {
+	IRTerminatorType type;
+
+	union {
+		struct {
+			int       hasval;
+			IROperand value;
+		} ret;
+
+		/* XXX: jmp, br */
+	} data;
+} IRTerminator;
+
+typedef struct {
 	const char*    name;
 	IRInstruction* ins;
 	IRParameterSet params;
+	IRTerminator   term;
 	size_t         cnt;
 	size_t         cap;
-	/* XXX: params */
 } IRBlock;
 
 typedef struct {

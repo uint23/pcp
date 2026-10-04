@@ -108,6 +108,11 @@ int main(int argc, char* argv[])
 	ins->opd[1].type = IR_OPD_INTEGER;
 	ins->opd[1].data.integer = 2;
 
+	block->term.type = IR_TERM_RET;
+	block->term.data.ret.hasval = 1;
+	block->term.data.ret.value.type = IR_OPD_VALUE;
+	block->term.data.ret.value.data.value = 4;
+
 	ir_print_function(&fn);
 
 	free(block->ins);
