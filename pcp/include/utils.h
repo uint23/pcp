@@ -19,5 +19,8 @@ typedef enum {
 /* print message and die with errorcode ec */
 void die(ErrorCode ec, const char* fmt, ...);
 
+/* grow (reallocate) a given list */
+void* list_grow(void* list, size_t item_size, size_t* capacity);
+
 #endif /* UTILS_H */
 
